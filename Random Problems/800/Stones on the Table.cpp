@@ -1,6 +1,5 @@
-// Stones on the Table
+// Stones on the Table (https://codeforces.com/problemset/problem/266/A)
 
-#include <bits/stdc++.h>
 #include <iostream>
 
 using namespace std;

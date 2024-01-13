@@ -1,6 +1,5 @@
-// Bear and Big Brother
+// Bear and Big Brother (https://codeforces.com/problemset/problem/791/A)
 
-#include <bits/stdc++.h>
 #include <iostream>
 
 using namespace std;

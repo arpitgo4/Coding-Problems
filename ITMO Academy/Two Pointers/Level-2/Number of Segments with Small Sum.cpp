@@ -10,8 +10,7 @@ using ll = long long;
 // Space: O(1)
 
 void solve(vector<int>& A, int N, ll S) {
-    int count = 0;
-    ll curr_sum = 0;
+    ll count = 0, curr_sum = 0;
     int j = 0;
     for (int i = 0; i < N; i++) {
         curr_sum += A[i];
@@ -21,8 +20,9 @@ void solve(vector<int>& A, int N, ll S) {
             j++;
         }
 
-        if (curr_sum <= S)
-            count++;
+        int wind_size = i-j+1;
+        int count_new_segments = (wind_size - 1) + 1;
+        count += count_new_segments;
     }
 
     cout << count;

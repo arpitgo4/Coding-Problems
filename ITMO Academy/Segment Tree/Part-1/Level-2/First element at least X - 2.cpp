@@ -10,7 +10,7 @@ using namespace std;
  * helped passing the time limits for the problem.
  * 
  * Although Big-O time complexity still remains same, but eliminator checks saved time
- * by not diving unnecessary subtree
+ * by not diving into unnecessary subtree
 */
 
 // Time: O(N + QlogN)

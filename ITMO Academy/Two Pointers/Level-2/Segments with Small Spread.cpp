@@ -13,15 +13,18 @@ typedef long long ll;
 // Space: O(NlogN)
  
 /**
- * Idea: build sparse table with min & max values in O(1)
+ * Idea: build sparse table, O(NlogN) with min & max value queries in O(1) time.
  * 
  * brute-force algorithm will take O(N^2) time compared to
  * sparse table approach will only take O(NlogN)
  * 
- * Sparse table will give better performace as values are constant
+ * Sparse table will give better performace as values are static
  * and each query will only take O(1) time compared to segment tree O(logN)
  * Only caveat, sparse table pre-processing takes O(NlogN) time compared
  * to O(N) for segment trees.
+ * 
+ * Can also use Ordered MultiSet to find min and max elements in subarray 
+ * in O(logN) time.
 */
 
 vector<vector<ll>> min_sp_table, max_sp_table;

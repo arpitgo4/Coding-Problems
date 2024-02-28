@@ -5,7 +5,7 @@
  
 using namespace std;
  
-void solve() {
+void solve(int N, vector<int>& stalls, int K) {
  
 }
  
@@ -13,7 +13,14 @@ int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    
+    int N, K;
+    cin >> N >> K;
+
+    vector<int> stalls(N);
+    for (int i = 0; i < N; i++)
+        cin >> stalls[i];
+
+    solve(N, stalls, K);
     
     return 0;
 }

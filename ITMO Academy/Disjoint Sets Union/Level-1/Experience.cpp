@@ -1,24 +1,25 @@
-// Experience (https://codeforces.com/edu/course/2/lesson/7/1/practice/contest/289390/problem/C)
  
 #include <iostream>
 #include <vector>
+#include <algorithm>
  
 using namespace std;
-using ll = long long;
  
-// Time: O(N * Q)
-// Space: O(N)
+// Time: O()
+// Space: O()
+ 
+#define INF LLONG_MAX
+ 
+typedef long long ll;
+ 
+vector<int> P, S, score, g_score;
 
-const int MAX = 2 * 1e5;
-
-vector<int> P, S;
-vector<ll> XP;
-
-void init_dsu() {
-    P.assign(MAX+1, 0);
-    XP.assign(MAX+1, 0);
-    S.assign(MAX+1, 1);
-    for (int i = 0; i < MAX+1; i++)
+void dsu_init(int N) {
+    P.assign(N+1, -1);
+    S.assign(N+1, 1);
+    score.assign(N+1, 0);
+    g_score.assign(N+1, 0);
+    for (int i = 0; i < N+1; i++)
         P[i] = i;
 }
 
@@ -29,28 +30,29 @@ int root(int x) {
     return P[x];
 }
 
-void union_set(int x, int y) {
+void join(int x, int y) {
     int root_x = root(x);
     int root_y = root(y);
     if (root_x == root_y)
         return;
 
-    if (S[root_x] > S[root_y]) {
-        P[root_y] = P[root_x];
-        S[root_x] += S[root_y];
-        S[root_y] = -1;
-    } else {
-        P[root_x] = P[root_y];
-        S[root_y] += S[root_x];
-        S[root_x] = -1;
-    }
+    if (S[root_x] < S[root_y])
+        swap(root_x, root_y);
+
+    P[root_y] = P[root_x];
+    S[root_x] += S[root_y];
+    S[root_y] = -1;
 }
 
-void addXP(int x, int v) {
+int get(int x) {
     int root_x = root(x);
-    for (int i = 0; i < MAX+1; i++)
-        if (root(i) == root_x)
-            XP[i] += v;
+    return score[x] + g_score[root_x];
+}
+
+void add(int x, int val) {
+    int root_x = root(x);
+    score[x] += val;
+    g_score[root_x] += val; 
 }
  
 int main() {
@@ -60,22 +62,20 @@ int main() {
     int N, Q;
     cin >> N >> Q;
 
-    init_dsu();
+    dsu_init(N);
 
-    string type;
-    int x, y, v;
+    string op;
+    int x, y;
     for (int i = 0; i < Q; i++) {
-        cin >> type;
-        if (type == "join") {
-            cin >> x >> y;
-            union_set(x, y);
-        } else if (type == "add") {
-            cin >> x >> v;
-            addXP(x, v);
-        } else {
-            cin >> x;
-            cout << XP[x] << endl;
-        }
+        cin >> op >> x;
+        if (op == "add") {
+            cin >> y;
+            add(x, y);
+        } else if (op == "join") {
+            cin >> y;
+            join(x, y);
+        } else
+            cout << get(x) << endl;
     }
     
     return 0;

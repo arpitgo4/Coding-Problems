@@ -20,6 +20,9 @@ using namespace std;
  * Pick a district and then pick next not-similar district
  * This hints towards a backtracking algorithm with a dynamic
  * data-structure
+ * 
+ * Take a greedy approach or ad-hoc problem solving will do this
+ * in linear/quasi-linear time
 */
 
 vector<int> dp, P;

@@ -139,9 +139,9 @@ int main() {
         int N, M;
         cin >> N >> M;
 
+        int volunteer = BASE_V1;
         string s1, s2;
         vector<edge> edges(M*2);
-        int volunteer = BASE_V1;
         for (int i = 0; i < M*2; i+=2) {
             cin >> s1 >> s2;
             edges[i] = { volunteer, size_map[s1] };

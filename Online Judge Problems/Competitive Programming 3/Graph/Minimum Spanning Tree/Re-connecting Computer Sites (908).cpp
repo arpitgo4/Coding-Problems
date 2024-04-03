@@ -1,7 +1,7 @@
 // Re-connecting Computer Sites (908)
  
-#include <stdio.h>
 #include <iostream>
+#include <string>
 #include <vector>
 #include <climits>
 #include <tuple>
@@ -9,9 +9,15 @@
  
 using namespace std;
  
+/**
+ * Added string's getline() to exit program on empty line
+ * 
+ * TODO: add input parsing logic in main()
+*/
+
 // Time: O((N+M)log(N+M) * ⍺(N+M))
 // Space: O(N+M)
- 
+
 #define INF LLONG_MAX
  
 typedef long long ll;
@@ -73,12 +79,16 @@ void solve(vector<edge>& T, int N, vector<edge>& new_lines, int K, vector<edge>&
 }
  
 int main() {
-    // ios_base::sync_with_stdio(false);
-    // cin.tie(NULL);
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
 
+    string line;
     int N, K, M;
-    while(scanf("%d", &N) == 1) { 
-        cout << "Here..." << endl;
+    while(true) {
+        getline(cin, line);
+        if (line.empty())
+            break;
+
         int u, v; ll c;
         vector<edge> T(N-1);
         for (int i = 0; i < N-1; i++) {

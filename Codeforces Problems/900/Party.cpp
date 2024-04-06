@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <vector>
+#include <algorithm>
  
 using namespace std;
  
@@ -33,10 +34,7 @@ void solve(vector<edge>& edges, int N) {
     for (int u : roots)
         dfs(u, -1, 1);
 
-    int count = 0;
-    for (int d : depth)
-        count = max(count, d);
-
+    int count = *max_element(depth.begin(), depth.end());
     cout << count << endl;
 }
  

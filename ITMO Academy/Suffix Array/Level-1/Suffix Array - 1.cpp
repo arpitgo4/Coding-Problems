@@ -33,27 +33,28 @@ vector<int> P, C;
 void sort_cyclic_shifts(string& S) {
     int N = S.length();
     P.assign(N, -1);
+    C.assign(N, -1);
+
+    for (int i = 0; i < N; i++)
+        P[i] = i;
 
     auto comp1 = [&](const int a, const int b) {
         return S[a] < S[b];
     };
-    for (int i = 0; i < N; i++)
-        P[i] = i;
     sort(P.begin(), P.end(), comp1);
-    
-    C.assign(N, 0);
+
     int classes = 1;
+    C[0] = 0;
     for (int i = 1; i < N; i++) {
         if (S[P[i]] != S[P[i-1]])
             classes++;
-        C[P[i]] = classes-1;
+        C[P[i]] = classes;
     }
-    
+
     for (int k = 1; k <= ceil(log2(N)); k++) {
-        // sort suffixes
         auto comp2 = [&](const int a, const int b) {
-            substring s1 = { a, (a+(1<<(k-1))) % N };
-            substring s2 = { b, (b+(1<<(k-1))) % N };
+            substring s1 = { a, (a + (1<<(k-1))) % N };
+            substring s2 = { b, (b + (1<<(k-1))) % N };
 
             if (C[s1.first] == C[s2.first])
                 return C[s1.second] < C[s2.second];
@@ -61,17 +62,15 @@ void sort_cyclic_shifts(string& S) {
         };
         sort(P.begin(), P.end(), comp2);
 
-        // re-assign equivalence classes
+        vector<int> new_C(N, 0);
         int classes = 1;
-        vector<int> new_C(N, -1);
-        new_C[P[0]] = classes-1;
         for (int i = 1; i < N; i++) {
-            substring s1 = { P[i], (P[i]+(1<<(k-1))) % N };
-            substring s2 = { P[i-1], (P[i-1]+(1<<(k-1))) % N };
+            substring s1 = { P[i], (P[i] + (1<<(k-1))) % N };
+            substring s2 = { P[i-1], (P[i-1] + (1<<(k-1))) % N };
 
             if (C[s1.first] != C[s2.first] || C[s1.second] != C[s2.second])
                 classes++;
-            new_C[P[i]] = classes-1;
+            new_C[P[i]] = classes;
         }
 
         C = new_C;
@@ -79,9 +78,9 @@ void sort_cyclic_shifts(string& S) {
 }
 
 void solve(string& S) {
-    string str = S + "$";
+    string str = S + '$';
     sort_cyclic_shifts(str);
- 
+
     for (int suff_idx : P)
         cout << suff_idx << " ";
     cout << endl;

@@ -4,10 +4,6 @@
 #include <vector>
 
 using namespace std;
- 
-/**
- * Giving WA in Uva
- */
 
 // Time: O(N + M)
 // Space: O(M)

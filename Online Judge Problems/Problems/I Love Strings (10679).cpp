@@ -45,14 +45,15 @@ public:
         this->parent = parent;
         this->par_ch = par_ch;
     }
-}root;
+};
 
+TrieNode* root;
 vector<TrieNode*> nodes;
 
 void insert_trie(string& S, int pat_idx) {
-    TrieNode* node = &root;
+    TrieNode* node = root;
     for (char c : S) {
-        int i = c - 'A';
+        int i = c;
         if (node->next[i] == NULL) 
             node->next[i] = new TrieNode(node, c);
         node = node->next[i];
@@ -67,8 +68,8 @@ TrieNode* go(TrieNode* node, char c);
 
 TrieNode* get_link(TrieNode* node) {
     if (node->link == NULL) {
-        if (node == &root || node->parent == &root)
-            node->link = &root;
+        if (node == root || node->parent == root)
+            node->link = root;
         else {
             TrieNode* par_link = get_link(node->parent);
             node->link = go(par_link, node->par_ch);
@@ -79,13 +80,13 @@ TrieNode* get_link(TrieNode* node) {
 }
 
 TrieNode* go(TrieNode* node, char c) {
-    int i = c - 'A';
+    int i = c;
     if (node->go[i] == NULL) {
         if (node->next[i] != NULL)
             node->go[i] = node->next[i];
         else {
             TrieNode* link = get_link(node);
-            node->go[i] = (node == &root) ? &root : go(link, c);
+            node->go[i] = (node == root) ? root : go(link, c);
         }
     }
 
@@ -113,12 +114,14 @@ void solve(string& S, vector<string>& patterns, int K) {
     match.assign(K, false);
     node_counter = 0;
 
+    root = new TrieNode();
+
     for (int i = 0; i < K; i++)
         insert_trie(patterns[i], i);
 
     // builds suffix link tree
-    nodes[root.node_id] = &root;
-    for (int i = 2; i <= node_counter; i++) {
+    nodes[root->node_id] = root;
+    for (int i = 1; i <= node_counter; i++) {
         TrieNode* node = nodes[i];
         TrieNode* link = get_link(node);
 
@@ -126,13 +129,13 @@ void solve(string& S, vector<string>& patterns, int K) {
         T[link->node_id].push_back(node->node_id);
     }
 
-    TrieNode* node = &root;
+    TrieNode* node = root;
     for (char c : S) {
         node = go(node, c);
         visited[node->node_id] = true;
     }
 
-    dfs(root.node_id, -1);
+    dfs(root->node_id, -1);
 
     for (bool found : match)
         cout << (found ? "y" : "n") << endl;

@@ -13,7 +13,7 @@ using namespace std;
 // Space: O(M)
 
 const int MAX_N = 1e6 + 100;
-const int ALPHABET = 256;
+const int ALPHABET = 128;
 
 vector<vector<int>> T;                                  // suffix-link tree
 vector<bool> visited, match;

@@ -12,23 +12,23 @@ using namespace std;
 // Space: O(N)
  
 void solve(vector<int>& A, int N) {
-    multiset<int> mset(A.begin(), A.end());
+    multiset<int> mSet(A.begin(), A.end());
 
-    while (mset.size() > 1) {
-        int a = *mset.begin();
-        mset.erase(mset.begin());
+    while (mSet.size() > 1) {
+        int a = *mSet.begin();
+        mSet.erase(mSet.begin());
 
-        auto itr = mset.lower_bound(a);
-        if (itr == mset.end())
+        auto itr = mSet.lower_bound(a);
+        if (itr == mSet.end())
             itr = prev(itr);
 
         int b = *itr;
-        mset.erase(itr);
+        mSet.erase(itr);
         if (abs(a-b) > 1) {
             cout << "NO" << endl;
             return;
         } else {
-            mset.insert(max(a, b));
+            mSet.insert(max(a, b));
         }
     }
 

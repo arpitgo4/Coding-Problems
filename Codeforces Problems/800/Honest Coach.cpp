@@ -17,7 +17,7 @@ using namespace std;
  * Space: O(N)
  * 
  * Greedy approach,
- * 
+ * Sort numbers and find the minimum diff between each pair of numbers
  */
 
 void solve(vector<int>& A, int N) {

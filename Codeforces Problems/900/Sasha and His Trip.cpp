@@ -14,7 +14,7 @@ using namespace std;
  *       to fuel up as the cost of fuel at current stop will be
  *       minimum compared to any of the next coming stops.
  * 
- * TODO: can be optimized to O(N) time using a greedy approach.
+ * TODO: can be optimized to O(N) time using greedy approach.
  */
 
 vector<vector<int>> dp;

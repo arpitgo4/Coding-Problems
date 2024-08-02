@@ -5,8 +5,8 @@
  
 using namespace std;
  
-// Time: O(N^2 * K)
-// Space: O(N^2 * K)
+// Time: O(N * K)
+// Space: O(N * K)
  
 const int MAX_N = 1120 + 1;
 const int MAX_K = 14 + 1;

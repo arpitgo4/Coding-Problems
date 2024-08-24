@@ -2,13 +2,13 @@
  
 #include <iostream>
 #include <vector>
-#include <utility>
-#include <tuple>
+#include <cmath>
+#include <climits>
  
 using namespace std;
  
 /**
- * NOTE: code is working, but needs optimization to remove passing around pair obejcts
+ * NOTE: code is working, but needs optimization to remove passing around pair objects
  * Test cases are giving TLE. 
  * Instead of having pair objects in tree, build 2 trees for minimum number and 
  * it's count values.
@@ -17,27 +17,32 @@ using namespace std;
 // Time: O(N + QlogN)
 // Space: O(N)
 
-vector<int> A;
-vector<pair<int,int>> seg_tree; 
+#define INF INT_MAX
 
-pair<int,int> merge(pair<int,int> left, pair<int,int> right) {
-    int min_element_1, min_element_2;
-    int count_1, count_2;
+vector<int> ST_min, ST_cnt, A;
 
-    tie(min_element_1, count_1) = left;
-    tie(min_element_2, count_2) = right;
+void merge(int i) {
+    int left_idx = 2*i+1, right_idx = left_idx + 1;
 
-    if (min_element_1 < min_element_2)
-        return left;
-    else if (min_element_2 < min_element_1)
-        return right;
-    else return { min_element_1, count_1 + count_2 };
+    if (ST_min[left_idx] < ST_min[right_idx]) {
+        ST_min[i] = ST_min[left_idx];
+        ST_cnt[i] = ST_cnt[left_idx];
+    }
+    else if (ST_min[right_idx] < ST_min[left_idx]) {
+        ST_min[i] = ST_min[right_idx];
+        ST_cnt[i] = ST_cnt[right_idx];
+    }
+    else {
+        ST_min[i] = ST_min[left_idx];
+        ST_cnt[i] = ST_cnt[left_idx] + ST_cnt[right_idx];
+    };
 }
 
 void update(int l, int h, int i, int idx, int val) {
     if (l == h && l == idx) {
         A[idx] = val;
-        seg_tree[i] = { A[idx], 1 };
+        ST_min[i] = A[idx];
+        ST_cnt[i] = 1;
         return;
     }
 
@@ -46,32 +51,39 @@ void update(int l, int h, int i, int idx, int val) {
         update(l, m, 2*i+1, idx, val);
     else update(m+1, h, 2*i+2, idx, val);
     
-    seg_tree[i] = merge(seg_tree[2*i+1], seg_tree[2*i+2]);
+    merge(i);
 }
 
-pair<int,int> query(int l, int h, int i, int p, int q) {
-    if (p > q)
-        return { INT_MAX, 0 };
-    if (l == h)
-        return seg_tree[i];
+void query(int l, int h, int i, int p, int q, int& res_min, int& res_cnt) {
+    if (l > h || p > q)
+        return;
+    if (l == p && h == q) {
+        if (res_min > ST_min[i]) {
+            res_min = ST_min[i];
+            res_cnt = ST_cnt[i];
+        } else if (res_min == ST_min[i])
+            res_cnt += ST_cnt[i];
+
+        return;
+    }
 
     int m = (h-l)/2 + l;
-    return merge(
-        query(l, m, 2*i+1, p, min(q, m)), 
-        query(m+1, h, 2*i+2, max(m+1, p), q)
-    );
+    query(l, m, 2*i+1, p, min(q, m), res_min, res_cnt);
+    query(m+1, h, 2*i+2, max(m+1, p), q, res_min, res_cnt);
 }
 
 void build_segment_tree(int l, int h, int i) {
     if (l == h) {
-        seg_tree[i] = { A[l], 1 };
+        ST_min[i] = A[l];
+        ST_cnt[i] = 1;
         return;
     }
 
     int m = (h-l)/2 + l;
     build_segment_tree(l, m, 2*i+1);
     build_segment_tree(m+1, h, 2*i+2);
-    seg_tree[i] = merge(seg_tree[2*i+1], seg_tree[2*i+2]);
+
+    merge(i);
 }
  
 int main() {
@@ -82,8 +94,9 @@ int main() {
     cin >> N >> M;
 
     A.assign(N, 0);
-    seg_tree.assign(4*N, { INT_MAX, 0 });
-
+    ST_min.assign(4*N, INF);
+    ST_cnt.assign(4*N, 0);
+    
     for (int i = 0; i < N; i++)
         cin >> A[i];
 
@@ -97,8 +110,9 @@ int main() {
             update(0, N-1, 0, idx, v);
         } else {
             cin >> l >> h;
-            auto p = query(0, N-1, 0, l, h-1);
-            cout << p.first << " " << p.second << endl; 
+            int res_min = INF, res_cnt = 0;
+            query(0, N-1, 0, l, h-1, res_min, res_cnt);
+            cout << res_min << " " << res_cnt << endl; 
         }
     }
     

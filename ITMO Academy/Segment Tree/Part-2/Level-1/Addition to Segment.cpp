@@ -11,38 +11,48 @@ using namespace std;
 typedef long long ll;
 
 vector<ll> ST, lazy;
+vector<bool> marked;
 
-void push(int i) {
-    if (lazy[i] != 0) {
+void push(int l, int h, int i) {
+    if (marked[i]) {
+        int m = (h-l)/2 + l;
+        ST[2*i+1] += lazy[i] * (m-l+1);
+        ST[2*i+2] += lazy[i] * (h-m);
+
         lazy[2*i+1] += lazy[i];
         lazy[2*i+2] += lazy[i];
+        marked[2*i+1] = marked[2*i+2] = true;
+        
         lazy[i] = 0;
+        marked[i] = false;
     }
 }
 
 void update(int l, int h, int i, int p, int q, ll x) {
-    if (l > h || p > q)
+    if (p > q)
         return;
     if (l == p && h == q) {
+        ST[i] += x;
+        marked[i] = true;
         lazy[i] += x;
         return;
     }
 
-    push(i);
-
+    push(l, h, i);
     int m = (h-l)/2 + l;
     update(l, m, 2*i+1, p, min(q, m), x);
     update(m+1, h, 2*i+2, max(m+1, p), q, x);
+
+    ST[i] = ST[2*i+1] + ST[2*i+2];
 }
 
 ll query(int l, int h, int i, int k) {
     if (l > h)
         return 0;
     if (l == h && l == k)
-        return ST[i] + lazy[i];
-
-    push(i);
-
+        return ST[i];
+    
+    push(l, h, i);
     int m = (h-l)/2 + l;
     if (k <= m)
         return query(l, m, 2*i+1, k);
@@ -58,6 +68,7 @@ int main() {
 
     ST.assign(4*N, 0);
     lazy.assign(4*N, 0);
+    marked.assign(4*N, false);
 
     int type, l, h;
     ll x;

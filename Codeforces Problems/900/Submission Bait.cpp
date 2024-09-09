@@ -11,10 +11,7 @@ using namespace std;
 const int MAX_N = 50 + 1;
 
 void solve(vector<int>& A, int N) {
-    // count max element in array
-    // if count is odd, Alice can win
     vector<int> cnt(MAX_N, 0);
-
     for (int a : A)
         cnt[a]++;
 

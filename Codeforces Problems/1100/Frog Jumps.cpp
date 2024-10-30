@@ -10,6 +10,7 @@ using namespace std;
 // Space: O(1)
  
 void solve(string& S) {
+    S = 'R' + S + 'R';
     int N = S.length();
 
     int max_len = 0, last_r_idx = N-1;
@@ -33,8 +34,7 @@ int main() {
     while (T--) {
         string S;
         cin >> S;
-    
-        S = 'R' + S + 'R';
+
         solve(S);
     }
     

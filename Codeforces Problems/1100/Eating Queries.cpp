@@ -20,27 +20,21 @@ using namespace std;
 
 vector<int> pref;
 
-/**
- * when q is big and can't be exactly matched
- * h = N-1, we need to check this value and return -1;
- * 
- * when q is small and can't be exactly matched
- * l = 0, and return 1 as the answer
- */
 int query(int q, int N) {
+    if (pref[N-1] < q)
+        return -1;
+
     int l = 0, h = N-1;
     while (l <= h) {
         int m = (h-l)/2 + l;
-        if (pref[m] == q)
-            return m+1;
-        else if (pref[m] < q) {
-            l = m+1;
-        } else {                                                // pref[m] > q
+        if (pref[m] >= q) {
             h = m-1;
+        } else {                                                // pref[m] < q
+            l = m+1;
         }
     }
 
-    return (h == N-1 ? -1 : l+1);
+    return l+1;
 }
 
 void solve(vector<int>& A, int N) {

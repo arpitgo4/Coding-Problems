@@ -6,7 +6,7 @@
  
 using namespace std;
  
-// Time: O(N + M)
+// Time: O(N + MlogN)
 // Space: O(N)
  
 typedef long long ll;

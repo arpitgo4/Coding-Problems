@@ -1,4 +1,4 @@
-// Where's My Internet?? (https://open.kattis.com/problems/wheresmyinternet)
+// reachableroads (https://open.kattis.com/problems/reachableroads)
  
 #include <iostream>
 #include <vector>
@@ -32,39 +32,37 @@ void solve(vector<edge>& edges, int E, int V) {
         G[v].push_back(u);
     }
 
-    dfs(1);
-
     int count = 0;
-    for (int u = 1; u <= V; u++) {
-        if (vis[u] == 0)
-            count++;
-    }
-
-    if (count == 0) {
-        cout << "Connected" << endl;
-    } else {
-        for (int u = 1; u <= V; u++) {
-            if (vis[u] == 0)
-                cout << u << endl;
+    for (int u = 0; u < V; u++) {
+        if (vis[u] == 0) {
+            dfs(u);
+            count++;       
         }
     }
+
+    cout << (count-1) << endl;
 }
  
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    int V, E;
-    cin >> V >> E;
-    
-    int u, v;
-    vector<edge> edges(E);
-    for (int i = 0; i < E; i++) {
-        cin >> u >> v;
-        edges[i] = { u, v };
-    }
+    int T;
+    cin >> T;
 
-    solve(edges, E, V);
+    while (T--) {
+        int V, E;
+        cin >> V >> E;
+        
+        int u, v;
+        vector<edge> edges(E);
+        for (int i = 0; i < E; i++) {
+            cin >> u >> v;
+            edges[i] = { u, v };
+        }
+
+        solve(edges, E, V);
+    }
     
     return 0;
 }

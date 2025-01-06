@@ -1,0 +1,6 @@
+[submodule "Leetcode-Problems"]
+	path = Leetcode-Problems
+	url = https://github.com/arpitgo4/Leetcode-Problems.git
+[submodule "CSES-Problems"]
+	path = CSES-Problems
+	url = https://github.com/arpitgo4/CSES-Problems.git

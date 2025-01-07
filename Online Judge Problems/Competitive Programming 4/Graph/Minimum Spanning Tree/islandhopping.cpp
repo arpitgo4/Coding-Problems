@@ -2,6 +2,7 @@
  
 #include <iostream>
 #include <iomanip>
+#include <numeric>
 #include <vector>
 #include <algorithm>
 #include <tuple>
@@ -12,48 +13,50 @@ using namespace std;
 // Time: O(V * V)
 // Space: O(V * V)
  
-typedef pair<double,double> coord;
-typedef tuple<int,int,double> edge;
+typedef pair<double,double> Point;
+typedef tuple<int,int,double> Edge;
 
-vector<int> P, S;
-
-void init_dsu(int N) {
-    P.assign(N+1, -1);
-    S.assign(N+1, 1);
-    for (int i = 0; i <= N; i++) {
-        P[i] = i;
+class DisjointSet {
+public:
+    DisjointSet(int set_sz) {
+        parent_.assign(set_sz+1, -1);
+        sz_.assign(set_sz+1, 1);
+        iota(parent_.begin(), parent_.end(), 0);
     }
-}
 
-int root(int x) {
-    if (P[x] != x)
-        P[x] = root(P[x]);
+    int root(int x) {
+        if (parent_[x] != x)
+            parent_[x] = root(parent_[x]);
 
-    return P[x];
-}
-
-void union_set(int x, int y) {
-    int root_x = root(x);
-    int root_y = root(y);
-    if (root_x != root_y) {
-        if (S[root_x] < S[root_y])
-            swap(root_x, root_y);
-
-        P[root_y] = root_x;
-        S[root_x] += S[root_y];
+        return parent_[x];
     }
-}
 
-double dist(coord& c1, coord& c2) {
+    void unionSet(int x, int y) {
+        int root_x = root(x);
+        int root_y = root(y);
+        if (root_x != root_y) {
+            if (sz_[root_x] < sz_[root_y])
+                swap(root_x, root_y);
+
+            parent_[root_y] = root_x;
+            sz_[root_x] += sz_[root_y];
+        }
+    }
+private:
+    vector<int> parent_;
+    vector<int> sz_;
+};
+
+double dist(Point& c1, Point& c2) {
     double diff_x = (c2.first - c1.first);
     double diff_y = (c2.second - c1.second);
     return sqrt((diff_x * diff_x) + (diff_y * diff_y));
 }
 
-void solve(vector<coord>& A, int V) {
-    init_dsu(V);
+void solve(vector<Point>& A, int V) {
+    DisjointSet d_set(V);
 
-    vector<edge> edges;
+    vector<Edge> edges;
     for (int i = 0; i < V; i++) {
         for (int j = i+1; j < V; j++) {
             double w = dist(A[i], A[j]);
@@ -68,9 +71,9 @@ void solve(vector<coord>& A, int V) {
 
     double tot_w = 0.0;
     for (auto& [i, j, w] : edges) {
-        if (root(i) != root(j)) {
+        if (d_set.root(i) != d_set.root(j)) {
             tot_w += w;
-            union_set(i, j);
+            d_set.unionSet(i, j);
         }
     }
 
@@ -89,7 +92,7 @@ int main() {
         cin >> V;
         
         double x, y;
-        vector<coord> A(V);
+        vector<Point> A(V);
         for (int i = 0; i < V; i++) {
             cin >> x >> y;
             A[i] = { x, y };

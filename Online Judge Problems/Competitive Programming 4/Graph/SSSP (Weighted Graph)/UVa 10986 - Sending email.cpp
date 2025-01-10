@@ -35,8 +35,6 @@ void dijkstra(Graph& adj_list, int src, int dest, vector<LLong>& dist, vector<in
         if (vis[curr] == 1)
             continue;
 
-        vis[curr] = 1;
-
         for (GraphEdge& edge : adj_list[curr]) {
             int next = edge.first;
             LLong weight = edge.second;
@@ -45,6 +43,8 @@ void dijkstra(Graph& adj_list, int src, int dest, vector<LLong>& dist, vector<in
                 pq.push({ dist[next], next });
             }
         }
+
+        vis[curr] = 1;
     }
 }
 

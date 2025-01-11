@@ -12,58 +12,56 @@ using namespace std;
 
 #define INF INT_MAX
 
-vector<int> vis, cnt;
+void min_btn_presses(int floor_cnt, int src_floor, int dest_floor, int up_cnt, int down_cnt, vector<int>& dist) {
+    vector<int> vis(floor_cnt+1, 0);
+    vector<int> moves{ up_cnt, -down_cnt };
 
-void bfs(int V, int src, int dest, int up, int down) {
-    vector<int> moves{ up, -down };
+    queue<int> floorQueue;
+    floorQueue.push(src_floor);
+    vis[src_floor] = 1;
+    dist[src_floor] = 0;
 
-    queue<int> q;
-    q.push(src);
-    vis[src] = 1;
-    cnt[src] = 0;
+    while (!floorQueue.empty()) {
+        int curr = floorQueue.front();
+        floorQueue.pop();
 
-    while (!q.empty()) {
-        int u = q.front();
-        q.pop();
-
-        if (vis[u] == 2)
+        if (vis[curr] == 2)
             continue;
 
         for (int move : moves) {
-            int v = u + move;
-            if (v >= 0 && v < V && vis[v] == 0) {
-                q.push(v);
-                vis[v] = 1;
-                cnt[v] = cnt[u] + 1;
+            int next = curr + move;
+
+            if (next >= 1 && next <= floor_cnt && vis[next] == 0) {
+                floorQueue.push(next);
+                vis[next] = 1;
+                dist[next] = dist[curr] + 1;
             }
         }
-
-        vis[u] = 2;
+        
+        vis[curr] = 2;
     }
 }
 
-void solve(int V, int src, int dest, int up, int down) {
-    vis.assign(V+1, 0);
-    cnt.assign(V+1, INF);
+void solve(int floor_cnt, int src_floor, int dest_floor, int up_cnt, int down_cnt) {
+    vector<int> dist(floor_cnt+1, INF);
 
-    bfs(V, src, dest, up, down);
+    min_btn_presses(floor_cnt, src_floor, dest_floor, up_cnt, down_cnt, dist);
 
-    if (cnt[dest] == INF)
+    if (dist[dest_floor] == INF) {
         cout << "use the stairs" << endl;
-    else cout << cnt[dest] << endl;
+    } else {
+        cout << dist[dest_floor] << endl;
+    }
 }
  
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    int V, src, dest, up, down;
-    cin >> V >> src >> dest >> up >> down;
+    int floor_cnt, src_floor, dest_floor, up_cnt, down_cnt;
+    cin >> floor_cnt >> src_floor >> dest_floor >> up_cnt >> down_cnt;
 
-    src--;
-    dest--;
-
-    solve(V, src, dest, up, down);
+    solve(floor_cnt, src_floor, dest_floor, up_cnt, down_cnt);
     
     return 0;
 }

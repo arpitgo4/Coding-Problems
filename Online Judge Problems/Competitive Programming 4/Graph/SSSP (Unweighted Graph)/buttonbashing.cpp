@@ -14,19 +14,19 @@ using namespace std;
 const int MIN_TIME = 0;
 const int MAX_TIME = 3600;
 
-int min_btn_presses(vector<int>& btns, int btn_cnt, int target_time, vector<int>& dist) {
+int minBtnPresses(vector<int>& btns, int btn_cnt, int target_time, vector<int>& dist) {
     vector<int> vis(MAX_TIME+1, 0);
 
-    queue<int> stateQueue;
-    stateQueue.push(0);
+    queue<int> state_queue;
+    state_queue.push(0);
     vis[0] = 1;
     dist[0] = 0;
 
     int nearest_time = INF;
 
-    while (!stateQueue.empty()) {
-        int curr = stateQueue.front();
-        stateQueue.pop();
+    while (!state_queue.empty()) {
+        int curr = state_queue.front();
+        state_queue.pop();
 
         if (vis[curr] == 2)
             continue;
@@ -43,7 +43,7 @@ int min_btn_presses(vector<int>& btns, int btn_cnt, int target_time, vector<int>
             next = max(MIN_TIME, min(next, MAX_TIME));
 
             if (vis[next] == 0) {
-                stateQueue.push(next);
+                state_queue.push(next);
                 vis[next] = 1;
                 dist[next] = dist[curr] + 1;
             }
@@ -57,7 +57,7 @@ int min_btn_presses(vector<int>& btns, int btn_cnt, int target_time, vector<int>
 
 void solve(vector<int>& btns, int btn_cnt, int target_time) {
     vector<int> dist(MAX_TIME+1, INF);
-    int nearest_time = min_btn_presses(btns, btn_cnt, target_time, dist);
+    int nearest_time = minBtnPresses(btns, btn_cnt, target_time, dist);
 
     cout << dist[nearest_time] << " " << (nearest_time - target_time) << endl;
 }

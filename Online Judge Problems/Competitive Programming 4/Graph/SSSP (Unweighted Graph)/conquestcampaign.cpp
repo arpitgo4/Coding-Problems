@@ -9,72 +9,74 @@ using namespace std;
  
 // Time: O(N * M)
 // Space: O(N * M)
- 
-typedef pair<int,int> coord;
-typedef tuple<int,int,int> state;
 
-vector<vector<int>> vis;
+using point_t = pair<int,int>;
+using matrix_t = vector<vector<int>>;
 
-vector<coord> moves{
-    { -1, 0 },          // up
-    { 1, 0 },           // down
-    { 0, -1 },          // left
-    { 0, 1 }            // right
-};
+int minDaysToConquer(int row_cnt, int cell_cnt, vector<point_t>& weak_cells, int weak_cell_cnt, matrix_t& vis, matrix_t& day) {
 
-int bfs(vector<coord>& S, int N, int M) {
-    queue<state> q;
-    for (auto& [i, j] : S) {
-        q.push({ i, j, 1 });
-        vis[i][j] = 1;
+    vector<point_t> moves{
+        { -1, 0 },          // up
+        { 1, 0 },           // down
+        { 0, -1 },          // left
+        { 0, 1 }            // right
+    };
+
+    queue<point_t> point_queue;
+    for (auto& [ y, x ] : weak_cells) {
+        point_queue.push({ y, x });
+        vis[y][x] = 1;
+        day[y][x] = 1;
     }
 
-    int max_days = 1;
-    while (!q.empty()) {
-        auto [i, j, d] = q.front();
-        q.pop();
+    int day_cnt = 1;
+    while (!point_queue.empty()) {
+        auto [ y, x ] = point_queue.front();
+        point_queue.pop();
 
-        if (vis[i][j] == 2)
+        if (vis[y][x] == 2)
             continue;
 
-        max_days = max(max_days, d);
+        day_cnt = max(day_cnt, day[y][x]);
 
-        for (auto& [di, dj] : moves) {
-            int ni = i + di, nj = j + dj;
-            if (ni >= 0 && ni < N && nj >= 0 && nj < M && vis[ni][nj] == 0) {
-                q.push({ ni, nj, d+1 });
-                vis[ni][nj] = 1;
+        for (auto& [ dy, dx ] : moves) {
+            int nx = x + dx, ny = y + dy;
+            if (nx > 0 && nx <= cell_cnt && ny > 0 && ny <= row_cnt && vis[ny][nx] == 0) {
+                point_queue.push({ ny, nx });
+                vis[ny][nx] = 1;
+                day[ny][nx] = day[y][x] + 1;
             }
         }
 
-        vis[i][j] = 2;
+        vis[y][x] = 2;
     }
 
-    return max_days;
+    return day_cnt;
 }
 
-void solve(vector<coord>& S, int N, int M) {
-    vis.assign(N+1, vector<int>(M+1, 0));
-    int day_cnt = bfs(S, N, M);
+void solve(int row_cnt, int cell_cnt, vector<point_t>& weak_cells, int weak_cell_cnt) {
+    matrix_t vis(row_cnt+1, vector<int>(cell_cnt+1, 0));
+    matrix_t day(row_cnt+1, vector<int>(cell_cnt+1, -1));
 
-    cout << day_cnt << endl;
+    int cnt = minDaysToConquer(row_cnt, cell_cnt, weak_cells, weak_cell_cnt, vis, day);
+    cout << cnt << endl;
 }
  
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    int N, M, src_cnt;
-    cin >> N >> M >> src_cnt;
+    int row_cnt, col_cnt, weak_cell_cnt;
+    cin >> row_cnt >> col_cnt >> weak_cell_cnt;
 
     int x, y;
-    vector<coord> S(src_cnt);
-    for (int i = 0; i < src_cnt; i++) {
-        cin >> x >> y;
-        S[i] = { x-1, y-1 };
+    vector<point_t> weak_cells(weak_cell_cnt);
+    for (int i = 0; i < weak_cell_cnt; i++) {
+        cin >> y >> x;
+        weak_cells[i] = { y, x };
     }
 
-    solve(S, N, M);
+    solve(row_cnt, col_cnt, weak_cells, weak_cell_cnt);
     
     return 0;
 }

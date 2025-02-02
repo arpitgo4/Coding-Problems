@@ -8,8 +8,8 @@
  
 using namespace std;
  
-// Time: O()
-// Space: O()
+// Time: O(NlogN)
+// Space: O(N)
  
 int main() {
     ios_base::sync_with_stdio(false);

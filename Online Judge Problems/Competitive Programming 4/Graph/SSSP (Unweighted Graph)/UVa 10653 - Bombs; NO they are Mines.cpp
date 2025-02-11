@@ -15,7 +15,7 @@ constexpr int INF = INT_MAX;
 using grid_t = vector<vector<int>>;
 using point_t = pair<int,int>;
 
-void findShorestDistance(grid_t& grid, int row_cnt, int col_cnt, point_t& src, point_t& dest, grid_t& vis, grid_t& dist) {
+void findShortestDistance(grid_t& grid, int row_cnt, int col_cnt, point_t& src, point_t& dest, grid_t& vis, grid_t& dist) {
 
     vector<point_t> moves{
         { -1, 0 },          // up
@@ -59,7 +59,7 @@ void solve(grid_t& grid, int row_cnt, int col_cnt, point_t& src, point_t& dest) 
     grid_t vis(row_cnt+1, vector<int>(col_cnt+1, 0));
     grid_t dist(row_cnt+1, vector<int>(col_cnt+1, INF));
 
-    findShorestDistance(grid, row_cnt, col_cnt, src, dest, vis, dist);
+    findShortestDistance(grid, row_cnt, col_cnt, src, dest, vis, dist);
 
     cout << dist[dest.first][dest.second] << endl;
 }

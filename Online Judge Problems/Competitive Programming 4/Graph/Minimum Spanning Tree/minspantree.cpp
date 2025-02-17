@@ -100,6 +100,9 @@ int main() {
         vector<edge> edges(edge_cnt);
         for (int i = 0; i < edge_cnt; i++) {
             cin >> u >> v >> w;
+            if (u > v)
+                swap(u, v);
+
             edges[i] = { u, v, w };    
         }
 

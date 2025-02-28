@@ -21,22 +21,16 @@ using graph_t = vector<vector<graph_edge_t>>;
 using queue_state_t = pair<ll_t,int>;
 using dag_t = vector<vector<int>>;
 
-int countPathsInDAG(dag_t& adj_list, int src, int dest, vector<int>& vis, vector<int>& dp) {
+int countPathsInDAG(dag_t& adj_list, int src, int dest, vector<int>& dp) {
     if (src == dest)
         return 1;
-
-    vis[src] = 1;
+    if (dp[src] != -1)
+        return dp[src];
 
     int count = 0;
     for (int next : adj_list[src]) {
-        if (vis[next] == 0) {
-            count += countPathsInDAG(adj_list, next, dest, vis, dp);
-        } else {                                                        // back-edge or cross-edge
-            count += dp[next];
-        }
+        count += countPathsInDAG(adj_list, next, dest, dp);
     }
-
-    vis[src] = 2;
 
     return dp[src] = count;
 }
@@ -95,9 +89,8 @@ void solve(int vertex_cnt, vector<edge_t>& edges, int edge_cnt, int src, int des
 
     buildShortestPathDAG(adj_list, src, dest, vertex_cnt, dist, parent);
 
-    vector<int> vis(vertex_cnt+1, 0);
     vector<int> dp(vertex_cnt+1, -1);
-    int path_cnt = countPathsInDAG(parent, dest, src, vis, dp);
+    int path_cnt = countPathsInDAG(parent, dest, src, dp);
 
     cout << path_cnt << endl;
 }

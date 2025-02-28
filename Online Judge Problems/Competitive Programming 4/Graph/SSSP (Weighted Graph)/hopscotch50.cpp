@@ -9,8 +9,8 @@
  
 using namespace std;
  
-// Time: O(ElogV)
-// Space: O(V)
+// Time: O(N^2logN)
+// Space: O(N^2)
  
 const int INF = INT_MAX;
 

@@ -8,7 +8,7 @@
 using namespace std;
  
 // Time: O(2^N)
-// Space: O(N)
+// Space: O(1)
 
 const int INF = INT_MAX;
 

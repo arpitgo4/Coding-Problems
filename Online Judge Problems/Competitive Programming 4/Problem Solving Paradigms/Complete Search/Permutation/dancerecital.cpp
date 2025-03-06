@@ -10,7 +10,7 @@
 using namespace std;
  
 // Time: O(N!)
-// Space: O(N)
+// Space: O(N^2)
  
 using matrix_t = vector<vector<int>>;
 

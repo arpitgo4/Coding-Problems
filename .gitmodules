@@ -4,3 +4,6 @@
 [submodule "CSES-Problems"]
 	path = CSES-Problems
 	url = https://github.com/arpitgo4/CSES-Problems.git
+[submodule "Exercism"]
+	path = Exercism
+	url = https://github.com/arpitgo4/Exercism.git

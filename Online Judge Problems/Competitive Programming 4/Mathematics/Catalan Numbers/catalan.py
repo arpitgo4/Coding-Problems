@@ -1,4 +1,9 @@
 
+# catalan (https://open.kattis.com/problems/catalan)
+
+# Time: O(N)
+# Space: O(N)
+
 MAX_NUM = 5000 * 2
 
 factorials = {}

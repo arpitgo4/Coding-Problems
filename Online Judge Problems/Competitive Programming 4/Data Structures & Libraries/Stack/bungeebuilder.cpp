@@ -98,26 +98,19 @@ private:
 
 void solve(vector<int>& mountain_height, int mountain_cnt) {
     MinSegmentTree min_seg_tree(mountain_height, mountain_cnt);
-    min_seg_tree.printTree();                               // TODO: remove!
-
-    // let's test segment tree implementation first!
-    
-
-    // next, test monotonic stack!
 
     int max_jumping_dist = 0;
-    stack<pair<int,int>> mountain_stack;               // { height, index } monotonically decreasing stack
+    stack<pair<int,int>> mountain_stack;        // { height, index } monotonically strictly-decreasing stack
     for (int i = mountain_cnt-1; i >= 0; i--) {
         while (!mountain_stack.empty() && 
-                mountain_stack.top().first > mountain_height[i]) {
+                mountain_stack.top().first < mountain_height[i]) {
             
             mountain_stack.pop();
         }
 
         if (!mountain_stack.empty()) {
             int higher_mountain_idx = mountain_stack.top().second;
-            int min_mountain_height = min_seg_tree.queryMin(0, mountain_cnt-1, 0, i+1, higher_mountain_idx-1);
-            cout << "min height: " << min_mountain_height << endl;
+            int min_mountain_height = min_seg_tree.queryMin(0, mountain_cnt-1, 0, i, higher_mountain_idx);
             if (min_mountain_height != INF) {
                 max_jumping_dist = max(
                     max_jumping_dist,
@@ -129,7 +122,31 @@ void solve(vector<int>& mountain_height, int mountain_cnt) {
         mountain_stack.push({ mountain_height[i], i });
     }
 
-    // TODO: need reverse iteration too!
+    // clear stack
+    while (!mountain_stack.empty()) {
+        mountain_stack.pop();
+    }
+
+    for (int i = 0; i < mountain_cnt; i++) {
+        while (!mountain_stack.empty() && 
+                mountain_stack.top().first < mountain_height[i]) {
+            
+            mountain_stack.pop();
+        }
+
+        if (!mountain_stack.empty()) {
+            int higher_mountain_idx = mountain_stack.top().second;
+            int min_mountain_height = min_seg_tree.queryMin(0, mountain_cnt-1, 0, higher_mountain_idx, i);
+            if (min_mountain_height != INF) {
+                max_jumping_dist = max(
+                    max_jumping_dist,
+                    mountain_height[i] - min_mountain_height
+                );
+            }
+        }
+        
+        mountain_stack.push({ mountain_height[i], i });
+    }
 
     cout << max_jumping_dist << endl;
 }

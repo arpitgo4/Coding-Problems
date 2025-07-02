@@ -1,9 +1,9 @@
 [submodule "Leetcode-Problems"]
 	path = Leetcode-Problems
-	url = https://github.com/arpitgo4/Leetcode-Problems.git
+	url = git@github.com:arpitgo4/Leetcode-Problems.git
 [submodule "CSES-Problems"]
 	path = CSES-Problems
-	url = https://github.com/arpitgo4/CSES-Problems.git
+	url = git@github.com:arpitgo4/CSES-Problems.git
 [submodule "Exercism"]
 	path = Exercism
-	url = https://github.com/arpitgo4/Exercism.git
+	url = git@github.com:arpitgo4/Exercism.git
